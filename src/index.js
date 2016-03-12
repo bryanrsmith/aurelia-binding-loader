@@ -4,48 +4,40 @@ export function configure({ aurelia }) {
 	const loader = aurelia.loader;
 	loader.addPlugin('module', {
 		fetch(address) {
-			const loadModule = () => loader.loadModule(address + '!jspm-loader-css-modules');
-			return { [address]: createCSSModulesResource(loadModule) };
+			return loader
+				.loadModule(address + '!jspm-loader-css-modules')
+				.then(module => ({ [address]: createCSSModulesResource(module.default) }));
 		}
 	});
 }
 
-function createCSSModulesResource(load) {
-	const target = CSSModuleInjector;
-	resource(new CSSModulesResource(load))(target);
+function createCSSModulesResource(styles) {
+	const target = class {};
+	resource(new CSSModulesResource(styles))(target);
 	return target;
 }
 
 class CSSModulesResource {
-	constructor(loadResource) {
-		this.loadResource = loadResource;
+	constructor(styles) {
+		this.styles = styles;
 	}
 
-	initialize(container, target) {
-		this.injector = new target();
-	}
+	initialize() {}
 
 	register(registry, name) {
-		this.injector.name = name;
-		registry.registerViewEngineHooks(this.injector);
+		this.name = name;
+		registry.registerViewEngineHooks(this);
 	}
 
-	load(container) {
-		return this.loadResource()
-			.then(module => {
-				this.injector.resource = module.default;
-			});
-	}
-}
+	load() {}
 
-class CSSModuleInjector {
 	afterCreate(view) {
 		const originalBind = view.bind;
 		const name = this.name;
-		const resource = this.resource;
+		const styles = this.styles;
 
 		view.bind = function(bindingContext, overrideContext, ...rest) {
-			overrideContext[name] = resource;
+			overrideContext[name] = styles;
 			return originalBind.call(this, bindingContext, overrideContext, ...rest);
 		};
 	}
