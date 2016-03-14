@@ -1,7 +1,7 @@
 {
-  "name": "aurelia-css-modules-loader",
+  "name": "aurelia-binding-loader",
   "version": "0.2.0",
-  "description": "Import CSS modules into Aurelia HTML view templates",
+  "description": "An Aurelia loader for using any module directly from a view template.",
   "main": "dist/index.js",
   "directories": {
     "lib": "dist/"
@@ -19,21 +19,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bryanrsmith/aurelia-css-modules-loader.git"
+    "url": "git+https://github.com/bryanrsmith/aurelia-binding-loader.git"
   },
   "keywords": [
     "aurelia",
-    "css modules"
+		"binding",
+    "templates"
   ],
   "author": "Bryan R Smith <BryanRSmith@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bryanrsmith/aurelia-css-modules-loader/issues"
+    "url": "https://github.com/bryanrsmith/aurelia-binding-loader/issues"
   },
-  "homepage": "https://github.com/bryanrsmith/aurelia-css-modules-loader#readme",
-  "dependencies": {
-    "jspm-loader-css-modules": "1.0.1-beta1"
-  },
+  "homepage": "https://github.com/bryanrsmith/aurelia-binding-loader#readme",
   "peerDependencies": {
     "aurelia-templating": "^1.0.0-beta.1.1.2"
   },
