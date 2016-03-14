@@ -1,6 +1,6 @@
 {
   "name": "aurelia-binding-loader",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "An Aurelia loader for using any module directly from a view template.",
   "main": "dist/index.js",
   "directories": {
@@ -23,7 +23,7 @@
   },
   "keywords": [
     "aurelia",
-		"binding",
+    "binding",
     "templates"
   ],
   "author": "Bryan R Smith <BryanRSmith@gmail.com>",
@@ -38,6 +38,7 @@
   "devDependencies": {
     "babel-cli": "6.6.4",
     "babel-preset-es2015": "6.6.0",
+    "babel-preset-stage-1": "6.5.0",
     "release-script": "1.0.2"
   }
 }
