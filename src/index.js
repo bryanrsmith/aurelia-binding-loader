@@ -1,4 +1,7 @@
 import { resource } from 'aurelia-templating';
+import * as LogManager from 'aurelia-logging';
+
+const logger = LogManager.getLogger('aurelia-binding-loader');
 
 export function configure({ aurelia }) {
 	const loader = aurelia.loader;
@@ -6,53 +9,44 @@ export function configure({ aurelia }) {
 		fetch(address) {
 			return loader
 				.loadModule(address)
-				.then(module => ({ [address]: createViewResource(module) }));
-		}
+				.then(module => ({ [address]: createViewResource(module, address) }));
+		},
 	});
 }
 
-function createViewResource(module) {
-	const target = class {};
-	resource(new ViewResourceBinder(module))(target);
-	return target;
+function createViewResource(module, address) {
+	@resource({
+		initialize() {},
+		load() {},
+		register(registry, name) {
+			const bindings = getBindings(name, module, address);
+			registry.registerViewEngineHooks({
+				beforeBind(view) {
+					Object.assign(view.overrideContext, bindings);
+				},
+			});
+		},
+	})
+	class Target {}
+
+	return Target;
 }
 
-class ViewResourceBinder {
-	constructor(module) {
-		this.module = module;
-	}
-
-	initialize() {}
-
-	register(registry, name) {
-		this.name = name;
-		registry.registerViewEngineHooks(this);
-	}
-
-	load() {}
-
-	afterCreate(view) {
-		const { name, module } = this;
-
-		let imports;
-		if (module.hasOwnProperty('default')) {
-			if (name) {
-				imports = module.default;
-			} else {
-				console.warn('Can\'t import default without a name. Use <require from="my-module" as="name">');
-			}
-		} else {
-			imports = { ...module };
-		}
-
+function getBindings(name, module, address) {
+	let imports;
+	if (module.hasOwnProperty('default')) {
 		if (name) {
-			imports = { [name]: imports };
+			imports = module.default;
+		} else {
+			logger.error(`${address}: Can't import default without a name. Use <require from="my-module!bind" as="name">`);
 		}
-
-		const originalBind = view.bind;
-		view.bind = function(bindingContext, overrideContext, ...rest) {
-			Object.assign(overrideContext, imports);
-			return originalBind.call(this, bindingContext, overrideContext, ...rest);
-		};
+	} else {
+		imports = { ...module };
 	}
+
+	if (name) {
+		imports = { [name]: imports };
+	}
+
+	return imports;
 }
