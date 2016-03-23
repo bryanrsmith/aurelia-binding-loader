@@ -34,8 +34,8 @@
   },
   "homepage": "https://github.com/bryanrsmith/aurelia-binding-loader#readme",
   "peerDependencies": {
-    "aurelia-logging": "^1.0.0-beta.1.1.2",
-    "aurelia-templating": "^1.0.0-beta.1.1.2"
+    "aurelia-logging": "^1.0.0-beta.1.2.0",
+    "aurelia-templating": "^1.0.0-beta.1.2.0"
   },
   "devDependencies": {
     "@bryanrsmith/eslint-config-standard": "2.0.2",
