@@ -1,6 +1,6 @@
 {
   "name": "aurelia-binding-loader",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An Aurelia loader for using any module directly from a view template.",
   "main": "dist/index.js",
   "directories": {
